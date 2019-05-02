@@ -3,10 +3,10 @@
 
 mkdir data
 
-sudo -u postgres psql -c "DROP DATABASE IF EXISTS dvf;"
-sudo -u postgres psql -c "CREATE DATABASE dvf;"
-sudo -u postgres psql -c "ALTER DATABASE dvf SET datestyle TO ""ISO, DMY"";"
-sudo -u postgres psql -d dvf -f "create_table.sql"
+psql -c "DROP DATABASE IF EXISTS dvf;"
+psql -c "CREATE DATABASE dvf;"
+psql -c "ALTER DATABASE dvf SET datestyle TO ""ISO, DMY"";"
+psql -d dvf -f "create_table.sql"
 
 # Chargement des données 
 cd data
@@ -24,14 +24,14 @@ perl -i.bak -pe 's/\,\d\d//g' valeursfoncieres-2017.txt
 perl -i.bak -pe 's/\,\d\d//g' valeursfoncieres-2018.txt
 
 #Chargement des données
-DIR="$( cd "$(dirname "$0")" ; pwd -P )"
-sudo -u postgres psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2014.txt' delimiter '|' csv header encoding 'UTF8';"
-sudo -u postgres psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2015.txt' delimiter '|' csv header encoding 'UTF8';"
-sudo -u postgres psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2016.txt' delimiter '|' csv header encoding 'UTF8';"
-sudo -u postgres psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2017.txt' delimiter '|' csv header encoding 'UTF8';"
-sudo -u postgres psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2018.txt' delimiter '|' csv header encoding 'UTF8';"
+DIR="$(pwd)"
+psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2014.txt' delimiter '|' csv header encoding 'UTF8';"
+psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2015.txt' delimiter '|' csv header encoding 'UTF8';"
+psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2016.txt' delimiter '|' csv header encoding 'UTF8';"
+psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2017.txt' delimiter '|' csv header encoding 'UTF8';"
+psql -d dvf -c "COPY dvf FROM '$DIR/valeursfoncieres-2018.txt' delimiter '|' csv header encoding 'UTF8';"
 
 # Ajout de colonnes et normalisation de champs -- Assez long
 cd ..
-sudo -u postgres psql -d dvf -f "alter_table.sql"
+psql -d dvf -f "alter_table.sql"
 
